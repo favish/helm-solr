@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ template "solr.fullname" . }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "solr.fullname" . }}
+  serviceName: {{ template "solr.fullname" . }}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "solr.fullname" . }}
+    spec:
+      securityContext:
+        fsGroup: 8983
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: solr
+        image: {{ .Values.image }}
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
+        ports:
+        - containerPort: 8983
+          name: solr
+        command:
+{{ toYaml .Values.command | indent 12 }}
+        livenessProbe:
+          httpGet:
+            path: /solr
+            port: 8983
+          initialDelaySeconds: 30
+          periodSeconds: 5
+        volumeMounts:
+        - name: {{ template "solr.fullname" . }}-cores
+          mountPath: {{ .Values.mountPath }}
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ template "solr.fullname" . }}-cores
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: {{ .Values.storage }}

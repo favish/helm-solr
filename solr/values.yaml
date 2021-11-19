@@ -1,0 +1,5 @@
+image: "favish/solr-6-drupal-8:1.0"
+storage: 1Gi
+command: ["solr-precreate", "drupal", "/drupal-config"]
+mountPath: "/opt/solr/server/solr/mycores"
+resources: {}
