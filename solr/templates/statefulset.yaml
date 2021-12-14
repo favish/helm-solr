@@ -21,6 +21,10 @@ spec:
       containers:
       - name: solr
         image: {{ .Values.image }}
+        env:
+          # See 1.0.1 changelog for more information.
+          - name: LOG4J_FORMAT_MSG_NO_LOOKUPS
+            value: "true"
         resources:
 {{ toYaml .Values.resources | indent 12 }}
         ports:
