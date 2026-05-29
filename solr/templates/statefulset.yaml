@@ -21,17 +21,22 @@ spec:
       containers:
       - name: solr
         image: {{ .Values.image }}
+        {{- with .Values.env }}
         env:
-          # See 1.0.1 changelog for more information.
-          - name: LOG4J_FORMAT_MSG_NO_LOOKUPS
-            value: "true"
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         resources:
-{{ toYaml .Values.resources | indent 12 }}
+          {{- toYaml .Values.resources | nindent 12 }}
         ports:
         - containerPort: 8983
           name: solr
         command:
-{{ toYaml .Values.command | indent 12 }}
+          {{- tpl (toYaml .Values.command) . | nindent 12 }}
+        args:
+          - "--"
+          {{- with .Values.execArgs }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
         livenessProbe:
           httpGet:
             path: /solr

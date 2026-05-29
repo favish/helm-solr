@@ -1,8 +1,42 @@
-image: "favish/solr-6-drupal-8:1.0"
+image: "solr:9.10.1"
 storage: 1Gi
-command: ["solr-precreate", "drupal", "/drupal-config"]
+execArgs:
+  - "solr-precreate"
+  - "drupal"
+# we need to set the open file limit and the Max process limit to 65000 to avoid Solr startup failure with "Too many open files" error
+# see https://solr.apache.org/guide/solr/latest/deployment-guide/taking-solr-to-production.html#ulimit-settings-nix-operating-systems for more information
+command:
+  - "/bin/bash"
+  - "-ec"
+  - |
+    target=65000
+
+    hard_nofile="$(ulimit -Hn)"
+    hard_nproc="$(ulimit -Hu)"
+
+    set_nofile="$target"
+    set_nproc="$target"
+
+    if [ "$hard_nofile" -lt "$target" ]; then
+      set_nofile="$hard_nofile"
+    fi
+    if [ "$hard_nproc" -lt "$target" ]; then
+      set_nproc="$hard_nproc"
+    fi
+
+    ulimit -Sn "$set_nofile"
+    ulimit -Su "$set_nproc"
+
+    echo "Solr startup limits: nofile soft=$(ulimit -Sn)/hard=$(ulimit -Hn), nproc soft=$(ulimit -Su)/hard=$(ulimit -Hu)"
+    exec "$@"
 mountPath: "/opt/solr/server/solr/mycores"
 resources:
   requests:
     cpu: 100m
     memory: 200M
+env:
+  - name: SOLR_JAVA_MEM
+    value: "-Xms5g -Xmx5g"
+  # Default modules recommended for Drupal Search API Solr in Solr 9+
+  - name: SOLR_OPTS
+    value: "-Dsolr.modules=extraction,langid,analysis-extras -Dlog4j2.formatMsgNoLookups=true"
