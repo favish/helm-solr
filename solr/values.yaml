@@ -1,3 +1,13 @@
+# Default is the stock Solr image. Stock Solr creates the core with Solr's
+# _default schema; that is fine for non-Drupal use but search_api_solr rejects
+# it. For a Drupal project, point this at the shared image that bakes the
+# Drupal search_api_solr config set and set execArgs to its config path, e.g.:
+#
+#   image: "favish/solr-9-drupal-10:1.0"
+#   execArgs: ["solr-precreate", "drupal", "/opt/solr-conf"]
+#
+# The image is per-Drupal-version (its baked schema is generated for a specific
+# Drupal / search_api_solr version), so it is opt-in rather than the default.
 image: "solr:9.10.1"
 storage: 1Gi
 execArgs:
