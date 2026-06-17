@@ -1,39 +1,46 @@
 apiVersion: v1
 entries:
   solr:
-  - created: 2026-05-29T07:41:49.234686336Z
+  - created: 2026-06-17T07:43:03.831377303Z
+    description: Barebones apache-solr resources.
+    digest: 9f6c7363e1ff61804417d1b308a3144dd4ac7dfb93152ed8d4c0f113faf0ea90
+    name: solr
+    urls:
+    - https://favish.github.io/helm-solr/solr-2.1.0.tgz
+    version: 2.1.0
+  - created: 2026-06-17T07:43:03.830566968Z
     description: Barebones apache-solr resources.
     digest: 95c295f31dbd066c3affeec31851b3e4d93a0ddd23bf6079e8f9a5b810d9875f
     name: solr
     urls:
     - https://favish.github.io/helm-solr/solr-2.0.0.tgz
     version: 2.0.0
-  - created: 2026-05-29T07:41:49.234364209Z
+  - created: 2026-06-17T07:43:03.830383751Z
     description: Barebones apache-solr resources.
     digest: c651255ddfe66c768b497028ce913cc4d172291703d694a13e39d366fdf99506
     name: solr
     urls:
     - https://favish.github.io/helm-solr/solr-1.1.0.tgz
     version: 1.1.0
-  - created: 2026-05-29T07:41:49.234087832Z
+  - created: 2026-06-17T07:43:03.830197434Z
     description: Barebones apache-solr resources.
     digest: d9d54ce5723bc31a9779cc82b1aafca35dc786678880c883a7ae2087b21a5251
     name: solr
     urls:
     - https://favish.github.io/helm-solr/solr-1.0.2.tgz
     version: 1.0.2
-  - created: 2026-05-29T07:41:49.233812623Z
+  - created: 2026-06-17T07:43:03.830021129Z
     description: Barebones apache-solr resources.
     digest: b712b5607c903e784d3c400e810ca89a6f1766de21e498fa2bd86af9cbc7357b
     name: solr
     urls:
     - https://favish.github.io/helm-solr/solr-1.0.1.tgz
     version: 1.0.1
-  - created: 2026-05-29T07:41:49.233489806Z
+  - created: 2026-06-17T07:43:03.829848611Z
     description: Barebones apache-solr resources.
     digest: 66d9491f33aa8413340dcdcc806d86a36be6ab6d4f8e2269675f25afb532611e
     name: solr
     urls:
     - https://favish.github.io/helm-solr/solr-1.0.0.tgz
     version: 1.0.0
-generated: 2026-05-29T07:41:49.233034451Z
+generated: 2026-06-17T07:43:03.829520299Z
