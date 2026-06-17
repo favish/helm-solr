@@ -33,6 +33,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Renamed the solr service to `solr` from the `fullname` which varied across projects and environments.
 
+## [1.0.2] - 2021-12-30
+### Changed
+- Update the GitHub Pages domain.
+
 ## [1.0.1] - 2021-12-14
 ### Added
 - Default resources.
