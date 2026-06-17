@@ -10,6 +10,8 @@
 # Drupal / search_api_solr version), so it is opt-in rather than the default.
 image: "solr:9.10.1"
 storage: 1Gi
+# Optional PVC storage class. Empty = cluster default StorageClass.
+storageClassName: ""
 execArgs:
   - "solr-precreate"
   - "drupal"
@@ -40,13 +42,20 @@ command:
     echo "Solr startup limits: nofile soft=$(ulimit -Sn)/hard=$(ulimit -Hn), nproc soft=$(ulimit -Su)/hard=$(ulimit -Hu)"
     exec "$@"
 mountPath: "/opt/solr/server/solr/mycores"
+# Barebones defaults. The JVM heap (SOLR_JAVA_MEM) must fit inside the memory
+# limit with headroom for Lucene's off-heap mmap; keep Xms == Xmx and size the
+# memory request/limit around the heap. The previous default paired a 5g heap
+# with a 200M request and no limit, which could not be scheduled sanely and let
+# the pod balloon past the node. Real deployments should override both together.
 resources:
   requests:
     cpu: 100m
-    memory: 200M
+    memory: 512Mi
+  limits:
+    memory: 1Gi
 env:
   - name: SOLR_JAVA_MEM
-    value: "-Xms5g -Xmx5g"
+    value: "-Xms512m -Xmx512m"
   # Default modules recommended for Drupal Search API Solr in Solr 9+
   - name: SOLR_OPTS
     value: "-Dsolr.modules=extraction,langid,analysis-extras -Dlog4j2.formatMsgNoLookups=true"

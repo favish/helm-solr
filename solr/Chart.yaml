@@ -1,3 +1,4 @@
+apiVersion: v2
 name: solr
 description: Barebones apache-solr resources.
 # If you're testing locally, you'll need to add the version to this.  It's currently added by CI via circle-create-new-version.sh

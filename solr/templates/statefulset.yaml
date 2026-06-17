@@ -37,12 +37,28 @@ spec:
           {{- with .Values.execArgs }}
           {{- toYaml . | nindent 10 }}
           {{- end }}
+        # Gate liveness until the JVM has finished starting, so a slow cold start
+        # (large heap / core load) is not killed by the liveness probe.
+        startupProbe:
+          httpGet:
+            path: /solr
+            port: 8983
+          periodSeconds: 5
+          failureThreshold: 30
         livenessProbe:
           httpGet:
             path: /solr
             port: 8983
           initialDelaySeconds: 30
           periodSeconds: 5
+        # Gate Service traffic until Solr can actually answer, so clients are not
+        # routed to a starting/GC-paused pod.
+        readinessProbe:
+          httpGet:
+            path: /solr/admin/info/system
+            port: 8983
+          initialDelaySeconds: 10
+          periodSeconds: 10
         volumeMounts:
         - name: {{ template "solr.fullname" . }}-cores
           mountPath: {{ .Values.mountPath }}
@@ -51,6 +67,9 @@ spec:
       name: {{ template "solr.fullname" . }}-cores
     spec:
       accessModes: [ "ReadWriteOnce" ]
+      {{- with .Values.storageClassName }}
+      storageClassName: {{ . }}
+      {{- end }}
       resources:
         requests:
           storage: {{ .Values.storage }}
